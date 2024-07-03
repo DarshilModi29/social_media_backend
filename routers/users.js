@@ -48,10 +48,11 @@ router.post("/api/login", async (req, res) => {
             username: user.username,
         };
         let jwt_key = process.env.JWT_SECRET_KEY;
+        const expiresIn = 2 * 365 * 24 * 60 * 60;
         jwt.sign(
             payload,
             jwt_key,
-            { expiresIn: 86400 },
+            { expiresIn },
             (err, token) => {
                 if (err) {
                     console.log(err.toString);
