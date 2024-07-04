@@ -8,6 +8,7 @@ require("dotenv").config();
 //import routers
 const userRouter = require("./routers/users");
 const postRouter = require("./routers/posts");
+const contactRouter = require("./routers/follow");
 
 //port and other variables
 const port = process.env.PORT || 8000;
@@ -21,6 +22,7 @@ app.use(cors());
 //use routers
 app.use(userRouter);
 app.use(postRouter);
+app.use(contactRouter);
 
 //Database Connection
 require("./db/connection");
