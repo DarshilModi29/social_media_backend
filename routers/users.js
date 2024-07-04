@@ -6,7 +6,6 @@ const jwt = require("jsonwebtoken");
 router.post("/api/register", async (req, res) => {
     try {
         const { username, email, password } = req.body;
-        console.log(req.body);
 
         const isExist = await Users.findOne({ email });
         if (isExist) {
@@ -58,7 +57,6 @@ router.post("/api/login", async (req, res) => {
                     console.log(err.toString);
                     return res.status(500).json({ message: "Internal server error" })
                 }
-                console.log("Hello");
                 return res.json({ user, token });
             }
         );
