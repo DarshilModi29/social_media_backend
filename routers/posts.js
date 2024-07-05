@@ -68,4 +68,38 @@ router.get("/api/user", Auth, async (req, res) => {
     }
 });
 
+router.put("/api/like", Auth, async (req, res) => {
+    try {
+        const { id } = req.body;
+        const { user } = req;
+
+        if (!id) return res.status(400).json({ message: "User not found" });
+
+        const updatedPost = await Posts.updateOne({ _id: id }, {
+            $push: { likes: user._id }
+        });
+        res.json({ updatedPost, user });
+    } catch (error) {
+        console.log(error.toString());
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+router.put("/api/unlike", Auth, async (req, res) => {
+    try {
+        const { id } = req.body;
+        const { user } = req;
+
+        if (!id) return res.status(400).json({ message: "User not found" });
+
+        const updatedPost = await Posts.updateOne({ _id: id }, {
+            $pull: { likes: user._id }
+        });
+        res.json({ updatedPost, user });
+    } catch (error) {
+        console.log(error.toString());
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
 module.exports = router;
