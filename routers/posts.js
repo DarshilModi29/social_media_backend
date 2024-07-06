@@ -75,9 +75,9 @@ router.put("/api/like", Auth, async (req, res) => {
 
         if (!id) return res.status(400).json({ message: "User not found" });
 
-        const updatedPost = await Posts.updateOne({ _id: id }, {
+        const updatedPost = await Posts.findOneAndUpdate({ _id: id }, {
             $push: { likes: user._id }
-        });
+        }, { returnDocument: "after" }).populate("user", "_id username email");
         res.json({ updatedPost, user });
     } catch (error) {
         console.log(error.toString());
@@ -92,9 +92,9 @@ router.put("/api/unlike", Auth, async (req, res) => {
 
         if (!id) return res.status(400).json({ message: "User not found" });
 
-        const updatedPost = await Posts.updateOne({ _id: id }, {
+        const updatedPost = await Posts.findOneAndUpdate({ _id: id }, {
             $pull: { likes: user._id }
-        });
+        }, { returnDocument: "after" }).populate("user", "_id username email");
         res.json({ updatedPost, user });
     } catch (error) {
         console.log(error.toString());
