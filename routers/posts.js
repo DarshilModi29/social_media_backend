@@ -102,4 +102,59 @@ router.put("/api/unlike", Auth, async (req, res) => {
     }
 });
 
+router.put("/api/favourites", Auth, async (req, res) => {
+    try {
+        const { id } = req.body;
+        const { user } = req;
+
+        if (!id) return res.status(400).json({ message: "User not found" });
+
+        const updatedPost = await Posts.findOneAndUpdate({ _id: id }, {
+            $push: { favourites: user._id }
+        }, { returnDocument: "after" }).populate("user", "_id username email");
+
+        await Users.findOneAndUpdate({ _id: user._id }, {
+            $push: { favourites: id }
+        }, { returnDocument: "after" });
+
+        res.json({ updatedPost, user });
+    } catch (error) {
+        console.log(error.toString());
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+router.put("/api/unfavourites", Auth, async (req, res) => {
+    try {
+        const { id } = req.body;
+        const { user } = req;
+
+        if (!id) return res.status(400).json({ message: "User not found" });
+
+        const updatedPost = await Posts.findOneAndUpdate({ _id: id }, {
+            $pull: { favourites: user._id }
+        }, { returnDocument: "after" }).populate("user", "_id username email");
+
+        await Users.findOneAndUpdate({ _id: user._id }, {
+            $pull: { favourites: id }
+        }, { returnDocument: "after" });
+
+        res.json({ updatedPost, user });
+    } catch (error) {
+        console.log(error.toString());
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+router.get("/favourites", Auth, async (req, res) => {
+    try {
+        const { user } = req;
+        const favPosts = await Posts.find({ _id: { $in: user.favourites } });
+        res.json({ favPosts });
+    } catch (error) {
+        console.log(error.toString());
+        res.status(500).json({ message: "Internal server error" });
+    }
+})
+
 module.exports = router;

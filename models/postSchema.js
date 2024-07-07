@@ -22,6 +22,12 @@ const postSchema = mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "USER"
         }
+    ],
+    favourites: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "USER"
+        }
     ]
 }, { timestamps: true });
 
