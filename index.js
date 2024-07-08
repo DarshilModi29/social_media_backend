@@ -4,6 +4,15 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 require("dotenv").config();
+const cloudinary = require("cloudinary").v2;
+
+//cloudinary config
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
 
 //import routers
 const userRouter = require("./routers/users");
